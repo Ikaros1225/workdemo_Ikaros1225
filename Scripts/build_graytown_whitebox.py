@@ -8,6 +8,15 @@ BASE_MATERIAL = "/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"
 MATERIALS = {}
 
 
+def layout_x(label, x):
+    # The current UE viewport shows B/D opposite to the layout's left/right.
+    # Mirror only those two side regions; central zones and the player start stay put.
+    if (label.startswith("WB_B_") or label.startswith("WB_D_") or
+            label == "WB_C1_D_Connection" or label in ("WB_Label_GasStation", "WB_Label_Mine")):
+        return -float(x)
+    return float(x)
+
+
 def cm(value):
     return float(value)
 
@@ -37,7 +46,7 @@ def zone_material(color):
 def spawn_box(label, x, y, z, sx, sy, sz, color=(0.42, 0.44, 0.45)):
     actor = unreal.EditorLevelLibrary.spawn_actor_from_class(
         unreal.StaticMeshActor,
-        unreal.Vector(cm(x), cm(y), cm(z)),
+        unreal.Vector(cm(layout_x(label, x)), cm(y), cm(z)),
         unreal.Rotator(0.0, 0.0, 0.0),
     )
     actor.set_actor_label(label)
@@ -52,7 +61,7 @@ def spawn_box(label, x, y, z, sx, sy, sz, color=(0.42, 0.44, 0.45)):
 def spawn_cylinder(label, x, y, z, radius, height, color=(0.42, 0.44, 0.45)):
     actor = unreal.EditorLevelLibrary.spawn_actor_from_class(
         unreal.StaticMeshActor,
-        unreal.Vector(cm(x), cm(y), cm(z)),
+        unreal.Vector(cm(layout_x(label, x)), cm(y), cm(z)),
         unreal.Rotator(0.0, 0.0, 0.0),
     )
     actor.set_actor_label(label)
@@ -127,7 +136,7 @@ def set_label(actor, text):
 def spawn_label(label, text, x, y, z, color=(1.0, 1.0, 1.0)):
     actor = unreal.EditorLevelLibrary.spawn_actor_from_class(
         unreal.TextRenderActor,
-        unreal.Vector(cm(x), cm(y), cm(z)),
+        unreal.Vector(cm(layout_x(label, x)), cm(y), cm(z)),
         unreal.Rotator(0.0, 90.0, 0.0),
     )
     set_label(actor, label)
