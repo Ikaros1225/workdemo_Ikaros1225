@@ -58,6 +58,21 @@ def spawn_box(label, x, y, z, sx, sy, sz, color=(0.42, 0.44, 0.45)):
     return actor
 
 
+def spawn_box_rotated(label, x, y, z, sx, sy, sz, yaw, color=(0.42, 0.44, 0.45)):
+    actor = unreal.EditorLevelLibrary.spawn_actor_from_class(
+        unreal.StaticMeshActor,
+        unreal.Vector(cm(layout_x(label, x)), cm(y), cm(z)),
+        unreal.Rotator(0.0, cm(yaw), 0.0),
+    )
+    actor.set_actor_label(label)
+    actor.tags = [TAG, "Whitebox"]
+    mesh_component = actor.get_component_by_class(unreal.StaticMeshComponent)
+    mesh_component.set_static_mesh(unreal.load_asset(CUBE))
+    mesh_component.set_material(0, zone_material(color))
+    actor.set_actor_scale3d(unreal.Vector(cm(sx) / 100.0, cm(sy) / 100.0, cm(sz) / 100.0))
+    return actor
+
+
 def spawn_cylinder(label, x, y, z, radius, height, color=(0.42, 0.44, 0.45)):
     actor = unreal.EditorLevelLibrary.spawn_actor_from_class(
         unreal.StaticMeshActor,
@@ -161,11 +176,25 @@ def build():
     # South entry / wasteland tutorial area.
     A = (0.56, 0.36, 0.18)
     spawn_box("WB_A_Wasteland_Backdrop", 0, -5900, -20, 15000, 3200, 40, A)
-    spawn_box("WB_A_LeftRock", -3600, -6200, 400, 900, 1200, 800, A)
-    spawn_box("WB_A_RightRock", 3300, -5850, 350, 1100, 900, 700, A)
-    spawn_box("WB_A_Choke_WestWall", -4200, -4550, 650, 1800, 700, 1300, A)
-    spawn_box("WB_A_Choke_EastWall", 4200, -4550, 650, 1800, 700, 1300, A)
-    spawn_box("WB_A_MainApproach", 0, -5900, -100, 1500, 3200, 200, A)
+    spawn_box("WB_A_LeftRock", -4200, -6500, 260, 900, 1200, 520, A)
+    spawn_box("WB_A_RightRock", 2600, -6250, 240, 1100, 900, 480, A)
+    spawn_box("WB_A_Road_WestEntry", -5100, -6900, -55, 4800, 700, 110, (0.22, 0.25, 0.27))
+    spawn_box_rotated("WB_A_Road_Bend", -2850, -6450, -55, 3000, 700, 110, -18, (0.22, 0.25, 0.27))
+    spawn_box("WB_A_Road_NorthMouth", -1250, -5350, -55, 700, 1900, 110, (0.22, 0.25, 0.27))
+    # Axis-aligned stepped ruin wings: all buildings stay vertical while their
+    # footprints progressively narrow toward the 12m north mouth.
+    FUNNEL = (0.26, 0.27, 0.28)
+    spawn_box("WB_A_Funnel_West_Outer", -3400, -6000, 600, 1600, 1800, 1200, FUNNEL)
+    spawn_box("WB_A_Funnel_West_Mid", -2100, -5050, 560, 1400, 1500, 1120, FUNNEL)
+    spawn_box("WB_A_Funnel_West_Inner", -900, -4300, 520, 600, 1000, 1040, FUNNEL)
+    spawn_box("WB_A_Funnel_East_Outer", 3400, -6000, 600, 1600, 1800, 1200, FUNNEL)
+    spawn_box("WB_A_Funnel_East_Mid", 2100, -5050, 560, 1400, 1500, 1120, FUNNEL)
+    spawn_box("WB_A_Funnel_East_Inner", 900, -4300, 520, 600, 1000, 1040, FUNNEL)
+    # Low overlapping joint blocks close the staircase seams while preserving the mouth.
+    spawn_box("WB_A_Funnel_West_Joint", -2750, -5500, 260, 900, 700, 520, FUNNEL)
+    spawn_box("WB_A_Funnel_East_Joint", 2750, -5500, 260, 900, 700, 520, FUNNEL)
+    spawn_box("WB_A_Funnel_Mouth_Left", -900, -3700, 180, 450, 600, 360, A)
+    spawn_box("WB_A_Funnel_Mouth_Right", 900, -3700, 180, 450, 600, 360, A)
 
     # West gas station platform (+2 m), kept as a readable whitebox mass.
     B = (0.16, 0.38, 0.42)
@@ -178,6 +207,8 @@ def build():
     spawn_box("WB_B_GasStation_CanopyPost_R", -3800, -2350, 220, 120, 120, 400, B)
     for i, (x, y) in enumerate([(-4200, -2900), (-3900, -2900), (-4200, -3250)]):
         spawn_cylinder("WB_B_OilBarrel_%02d" % i, x, y, 60, 70, 120, (0.75, 0.32, 0.08))
+    spawn_box("WB_B_E1_CombatPocket", -4300, -1800, 135, 1100, 1000, 70, (0.23, 0.28, 0.30))
+    spawn_box("WB_B_StationEntryLane", -3000, -1800, 15, 900, 1700, 30, (0.21, 0.27, 0.29))
     # Collapsed overpass: 30 m long, deck top at roughly 4 m for third-person sightlines.
     spawn_box("WB_B_Overpass_CollapsedDeck", -5000, -2450, 250, 3000, 400, 300, B)
     spawn_box("WB_B_Overpass_CollapsedRamp", -3400, -3000, 200, 500, 1000, 400, B)
@@ -186,6 +217,11 @@ def build():
     spawn_box("WB_B_Overpass_Support_L", -6000, -2450, 120, 180, 180, 240, B)
     spawn_box("WB_B_Overpass_Support_R", -4050, -2450, 120, 180, 180, 240, B)
     spawn_box("WB_B_Overpass_Railing_Broken", -5000, -2270, 430, 3000, 60, 120, B)
+    for i in range(5):
+        spawn_box("WB_B_Overpass_WestStair_%02d" % i, -7200 + i * 350, -2450, 40 + i * 80, 350, 800, 80, B)
+    spawn_box("WB_B_Overpass_EastDropLanding", -3250, -2450, 120, 700, 800, 240, B)
+    spawn_box("WB_B_Overpass_EastDropMarker", -2850, -2450, 70, 300, 800, 140, B)
+    spawn_box_rotated("WB_B_ToC1_Slope", -2450, -2050, 65, 900, 650, 130, -12, (0.25, 0.32, 0.34))
 
     # C1 lower street: 36 m long, 25 m combat street, simple building pockets.
     C1 = (0.30, 0.40, 0.45)
@@ -277,8 +313,8 @@ def build():
 
     player_start = unreal.EditorLevelLibrary.spawn_actor_from_class(
         unreal.PlayerStart,
-        unreal.Vector(0.0, -6900.0, 120.0),
-        unreal.Rotator(0.0, 0.0, 0.0),
+        unreal.Vector(-3100.0, -6900.0, 120.0),
+        unreal.Rotator(0.0, 90.0, 0.0),
     )
     set_label(player_start, "WB_PlayerStart_SouthWasteland")
 
