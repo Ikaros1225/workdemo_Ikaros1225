@@ -3850,3 +3850,11 @@ LogConfig: Set CVar [[r.Shadow.DetectVertexShaderLayerAtRuntime:1]]
 [2026.09.19-15.40.19:049][ 29]LogContentValidation: Display: 正在验证/Script/Engine.StaticMeshActor /Game/ThirdPerson/Maps/ThirdPersonMap.ThirdPersonMap:PersistentLevel.StaticMeshActor_UAID_D8BBC19F5515560303_1581074140
 [2026.09.19-15.40.19:049][ 29]LogContentValidation: Display: 正在验证/Script/Engine.StaticMeshActor /Game/ThirdPerson/Maps/ThirdPersonMap.ThirdPersonMap:PersistentLevel.StaticMeshActor_UAID_D8BBC19F5515560303_1666511141
 [2026.09.19-15.40.19:049][ 29]LogContentValidation: Display: 正在验证/Script/Engine.StaticMeshActor /Game/ThirdPerson/Maps/ThirdPersonMap.ThirdPersonMap:PersistentLevel.StaticMeshActor_UAID_D8BBC19F5515560303_1683503142
+[2026.09.19-15.42.58:770][624]LogFileHelpers: InternalPromptForCheckoutAndSave started...
+[2026.09.19-15.42.58:795][624]LogUObjectHash: Compacting FUObjectHashTables data took   0.19ms
+[2026.09.19-15.42.58:799][624]LogUObjectHash: Compacting FUObjectHashTables data took   0.18ms
+[2026.09.19-15.42.58:802][624]LogUObjectHash: Compacting FUObjectHashTables data took   0.19ms
+[2026.09.19-15.42.58:809][624]LogFileHelpers: InternalPromptForCheckoutAndSave took 39 ms (total: 2.62 sec)
+[2026.09.19-15.44.31:333][  0]LogEOSSDK: LogEOS: Updating Product SDK Config, Time: 3295.185547
+[2026.09.19-15.44.32:334][  3]LogEOSSDK: LogEOS: SDK Config Product Update Request Completed - No Change
+[2026.09.19-15.44.32:334][  3]LogEOSSDK: LogEOS: ScheduleNextSDKConfigDataUpdate - Time: 3295.852051, Update Interval: 302.083801
